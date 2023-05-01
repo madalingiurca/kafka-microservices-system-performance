@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="OrderManagerApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+    <module name="OrderManager" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="upb.madalingiurca.ordermanager.OrderManagerApplication" />
+    <option name="VM_PARAMETERS" value="-Dspring.data.mongodb.host=localhost -Djdk.httpclient.HttpClient.log=requests" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

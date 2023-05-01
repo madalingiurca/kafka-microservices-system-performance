@@ -13,7 +13,12 @@ target/
 .idea/jarRepositories.xml
 .idea/compiler.xml
 .idea/libraries/
-.idea/*
+.idea/codeStyles
+.idea/dataSources
+.idea/httpRequests
+.idea/**.xml
+.idea/.gitignore
+
 *.iws
 *.iml
 *.ipr
@@ -42,6 +47,5 @@ build/
 
 ### Mac OS ###
 .DS_Store
-/.idea/
 /docs/articles/
 /mongo/data/
