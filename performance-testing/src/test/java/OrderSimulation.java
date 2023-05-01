@@ -13,6 +13,7 @@ public class OrderSimulation extends Simulation {
             .acceptHeader("application/json");
 
     ScenarioBuilder scn = scenario("Place order and checks until delivery ends")
+            .pause(10)
             .exec(Config.createOrderRequest)
             .exec(Config.monitorOrderRequest)
             .pause(ofSeconds(10))
@@ -26,9 +27,8 @@ public class OrderSimulation extends Simulation {
 
     {
         setUp(scn.injectOpen(
-//                constantUsersPerSec(1).during(3)
-                        rampUsersPerSec(1).to(2).during(4),
-                        constantUsersPerSec(2).during(4)
+                        rampUsersPerSec(1).to(30).during(30),
+                        constantUsersPerSec(30).during(4)
                 )
         ).protocols(httpProtocol);
     }
