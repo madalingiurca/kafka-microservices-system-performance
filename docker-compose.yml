@@ -1,0 +1,86 @@
+version: '3'
+
+services:
+  order-manager:
+    container_name: order-manager
+    networks:
+      - container-network
+    build:
+      context: ./OrderManager
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    links:
+      - mongodb
+
+  payment-processor:
+    container_name: payment-processor
+    networks:
+      - container-network
+    build:
+      context: ./PaymentProcessor
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8080"
+    links:
+      - mongodb
+
+  order-monitor:
+    container_name: order-monitor
+    networks:
+      - container-network
+    build:
+      context: ./OrderMonitor
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8080"
+    links:
+      - mongodb
+
+  order-tracking:
+    container_name: order-tracking
+    networks:
+      - container-network
+    build:
+      context: ./OrderTracking
+      dockerfile: Dockerfile
+    ports:
+      - "8083:8080"
+    links:
+      - mongodb
+
+  nginx:
+    container_name: gateway
+    networks:
+      - container-network
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    ports:
+      - "8000:80"
+    depends_on:
+      - order-manager
+      - order-monitor
+      - order-tracking
+      - payment-processor
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    networks:
+      - container-network
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data_container:/mongo/data
+      - ./mongo/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh:ro
+
+volumes:
+  mongodb_data_container:
+
+networks:
+  container-network:
+    driver: bridge
