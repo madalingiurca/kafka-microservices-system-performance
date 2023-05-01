@@ -7,6 +7,7 @@ import org.springframework.web.server.ResponseStatusException;
 import upb.madalingiurca.ordermanager.models.OrderStatus;
 import upb.madalingiurca.ordermanager.models.document.OrderDocument;
 import upb.madalingiurca.ordermanager.models.http.NewOrderRequest;
+import upb.madalingiurca.ordermanager.models.http.OrderDetails;
 import upb.madalingiurca.ordermanager.models.http.OrderStatusUpdate;
 import upb.madalingiurca.ordermanager.repository.OrderRepository;
 import upb.madalingiurca.ordermanager.service.PaymentService;
