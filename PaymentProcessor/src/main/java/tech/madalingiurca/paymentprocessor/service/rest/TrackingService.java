@@ -1,9 +1,10 @@
-package tech.madalingiurca.paymentprocessor.service;
+package tech.madalingiurca.paymentprocessor.service.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import tech.madalingiurca.paymentprocessor.model.PaymentStatus;
@@ -23,6 +24,7 @@ import static tech.madalingiurca.paymentprocessor.model.PaymentStatus.APPROVED;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Profile("!kafka")
 public class TrackingService {
     private final HttpClient httpClient;
     private final ObjectMapper objectMapper;
