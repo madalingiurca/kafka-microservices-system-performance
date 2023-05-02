@@ -25,7 +25,17 @@ public class KafkaTopicConfig {
     }
 
     @Bean
-    public NewTopic productTopic() {
+    public NewTopic orderTopic() {
         return new NewTopic("orders", 1, (short) 1);
+    }
+
+    @Bean
+    public NewTopic paymentTopic() {
+        return new NewTopic("payments", 1, (short) 1);
+    }
+
+    @Bean
+    public NewTopic updatesTopic() {
+        return new NewTopic("updates", 1, (short) 1);
     }
 }
