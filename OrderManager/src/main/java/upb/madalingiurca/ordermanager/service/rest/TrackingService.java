@@ -36,6 +36,7 @@ public class TrackingService {
         ObjectNode requestBody = objectMapper.createObjectNode()
                 .put("orderId", orderId.toString())
                 .put("orderStatus", awaitingPayment.toString());
+        // TODO: 03.05.2023 add one more field in the request for payment reference - kafka consistency
 
         var orderRequest = HttpRequest.newBuilder(URI.create(orderTrackerURL))
                 .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)

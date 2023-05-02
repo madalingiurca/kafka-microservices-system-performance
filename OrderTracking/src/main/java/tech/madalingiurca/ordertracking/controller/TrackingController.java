@@ -1,6 +1,7 @@
 package tech.madalingiurca.ordertracking.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,7 +12,7 @@ import tech.madalingiurca.ordertracking.model.document.TrackedOrderDocument;
 import tech.madalingiurca.ordertracking.model.http.NewStatus;
 import tech.madalingiurca.ordertracking.model.http.OrderTrackingRequest;
 import tech.madalingiurca.ordertracking.repository.TrackingRepository;
-import tech.madalingiurca.ordertracking.service.OrderManagerService;
+import tech.madalingiurca.ordertracking.service.http.OrderManagerService;
 
 import java.util.UUID;
 
@@ -19,6 +20,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @RestController("tracking")
 @RequiredArgsConstructor
+@ConditionalOnBean(OrderManagerService.class)
 public class TrackingController {
 
     private final TrackingRepository repository;
@@ -26,13 +28,13 @@ public class TrackingController {
 
     @PostMapping("/initialize")
     public void initializeOrder(@RequestBody OrderTrackingRequest orderTrackingRequest) {
-        repository.save(new TrackedOrderDocument(orderTrackingRequest.orderId(), orderTrackingRequest.orderStatus()));
+        repository.save(new TrackedOrderDocument(orderTrackingRequest.orderId(), orderTrackingRequest.orderStatus(), null));
     }
 
     @PostMapping("/update/{id}")
     public OrderStatus updateOrder(@PathVariable UUID id, @RequestBody NewStatus newStatus) {
         var updatedTrackedOrder = repository.findById(id)
-                .map(current -> new TrackedOrderDocument(current.orderId(), newStatus.orderStatus()))
+                .map(current -> new TrackedOrderDocument(current.orderId(), newStatus.orderStatus(), current.paymentReference()))
                 .map(repository::save)
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Tracking update failed"));
 

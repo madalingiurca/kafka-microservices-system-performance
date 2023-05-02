@@ -1,9 +1,10 @@
-package tech.madalingiurca.ordertracking.service;
+package tech.madalingiurca.ordertracking.service.http;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import tech.madalingiurca.ordertracking.model.OrderStatus;
@@ -22,6 +23,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Profile("!kafka")
 public class OrderManagerService {
     private final HttpClient httpClient;
     private final ObjectMapper objectMapper;

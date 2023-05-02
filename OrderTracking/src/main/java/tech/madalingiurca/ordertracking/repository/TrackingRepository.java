@@ -6,8 +6,11 @@ import tech.madalingiurca.ordertracking.model.OrderStatus;
 import tech.madalingiurca.ordertracking.model.document.TrackedOrderDocument;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface TrackingRepository extends MongoRepository<TrackedOrderDocument, UUID> {
     List<TrackedOrderDocument> findAllByOrderStatus(OrderStatus orderStatus);
+
+    Optional<TrackedOrderDocument> findByPaymentReference(UUID paymentReference);
 }

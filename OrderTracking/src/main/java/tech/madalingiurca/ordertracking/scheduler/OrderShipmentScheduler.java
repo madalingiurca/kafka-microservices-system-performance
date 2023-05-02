@@ -2,11 +2,12 @@ package tech.madalingiurca.ordertracking.scheduler;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import tech.madalingiurca.ordertracking.model.document.TrackedOrderDocument;
 import tech.madalingiurca.ordertracking.repository.TrackingRepository;
-import tech.madalingiurca.ordertracking.service.OrderManagerService;
+import tech.madalingiurca.ordertracking.service.http.OrderManagerService;
 
 import java.util.function.UnaryOperator;
 
@@ -16,7 +17,8 @@ import static tech.madalingiurca.ordertracking.model.OrderStatus.*;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class OrderShipmentScheduler {
+@ConditionalOnBean(OrderManagerService.class)
+public class OrderShipmentScheduler {// TODO: 03.05.2023 add a scheduler for kafka implementation
 
     private final TrackingRepository repository;
     private final OrderManagerService orderManagerService;
@@ -49,10 +51,10 @@ public class OrderShipmentScheduler {
     }
 
     private final UnaryOperator<TrackedOrderDocument> changeStatusToShipped =
-            (order) -> new TrackedOrderDocument(order.orderId(), SHIPPED);
+            (order) -> new TrackedOrderDocument(order.orderId(), SHIPPED, order.paymentReference());
 
     private final UnaryOperator<TrackedOrderDocument> changeStatusToDelivered =
-            (order) -> new TrackedOrderDocument(order.orderId(), DELIVERED);
+            (order) -> new TrackedOrderDocument(order.orderId(), DELIVERED, order.paymentReference());
 
 
 }
