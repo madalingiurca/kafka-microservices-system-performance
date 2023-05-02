@@ -3,6 +3,8 @@ version: '3'
 services:
   order-manager:
     container_name: order-manager
+    environment:
+      - SPRING_PROFILES_ACTIVE=kafka
     networks:
       - container-network
     build:
@@ -15,6 +17,8 @@ services:
 
   payment-processor:
     container_name: payment-processor
+    environment:
+      - SPRING_PROFILES_ACTIVE=kafka
     networks:
       - container-network
     build:
@@ -27,6 +31,8 @@ services:
 
   order-monitor:
     container_name: order-monitor
+    environment:
+      - SPRING_PROFILES_ACTIVE=kafka
     networks:
       - container-network
     build:
@@ -39,6 +45,8 @@ services:
 
   order-tracking:
     container_name: order-tracking
+    environment:
+      - SPRING_PROFILES_ACTIVE=kafka
     networks:
       - container-network
     build:
@@ -83,6 +91,8 @@ services:
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      - container-network
     ports:
       - "22181:2181"
 
@@ -90,6 +100,8 @@ services:
     image: confluentinc/cp-kafka:latest
     depends_on:
       - zookeeper
+    networks:
+      - container-network
     ports:
       - "29092:29092"
     environment:

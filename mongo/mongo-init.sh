@@ -24,4 +24,11 @@ db.createUser({
   pwd: "trackingPass",
   roles: [ { role: "readWrite", db: "tracking" } ]
 })
+
+use kafkaOrders
+db.createUser({
+  user: "kafkaWorker",
+  pwd: "kafkaPass",
+  roles: [ { role: "readWrite", db: "kafkaOrders" } ]
+})
 EOF

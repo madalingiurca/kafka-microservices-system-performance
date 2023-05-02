@@ -8,30 +8,22 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import tech.madalingiurca.ordermonitor.model.http.OrderInfoResponse;
-import tech.madalingiurca.ordermonitor.service.OrderManagerService;
-import tech.madalingiurca.ordermonitor.service.PaymentsQueryService;
+import tech.madalingiurca.ordermonitor.service.OrderRetrieveService;
 
 import java.util.UUID;
 
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @RestController
 @RequiredArgsConstructor
 @Slf4j
 public class OrderMonitorController {
 
-    private final OrderManagerService orderManagerService;
-    private final PaymentsQueryService paymentsQueryService;
+    private final OrderRetrieveService orderRetrieveService;
 
     @GetMapping("/{id}")
     public OrderInfoResponse getOrderInformation(@PathVariable UUID id) {
-        var orderDetails = orderManagerService.getOrderDetails(id)
-                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Order details not found"));
-        var paymentDetails = paymentsQueryService.getPaymentDetails(orderDetails.paymentReference())
-                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Payment details not found"));
-
-        return new OrderInfoResponse(paymentDetails, orderDetails);
+        return orderRetrieveService.getOrderDetails(id);
     }
 
     @ExceptionHandler(Exception.class)
