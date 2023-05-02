@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import upb.madalingiurca.ordermanager.models.OrderStatus;
 import upb.madalingiurca.ordermanager.models.document.OrderDocument;
+import upb.madalingiurca.ordermanager.models.event.NewOrderEvent;
 import upb.madalingiurca.ordermanager.models.http.NewOrderRequest;
 import upb.madalingiurca.ordermanager.models.http.OrderDetails;
 import upb.madalingiurca.ordermanager.models.http.OrderStatusUpdate;
@@ -37,7 +38,7 @@ public class KafkaOrderService implements OrderService {
                 newOrderRequest.products(),
                 newOrderRequest.amount());
 
-        kafkaTemplate.send("orders", orderDocument)
+        kafkaTemplate.send("orders", new NewOrderEvent(orderDocument))
                 .whenComplete(((res, throwable) -> {
                     if (res != null)
                         log.info("New order event successfully posted {}", res.getProducerRecord().value());
