@@ -9,13 +9,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import tech.madalingiurca.ordermonitor.event.NewOrderEvent;
 import tech.madalingiurca.ordermonitor.event.PaymentApprovalEvent;
-import tech.madalingiurca.ordermonitor.model.OrderStatus;
+import tech.madalingiurca.ordermonitor.event.UpdateOrderEvent;
 import tech.madalingiurca.ordermonitor.model.document.OrderDocument;
 import tech.madalingiurca.ordermonitor.repository.OrderRepository;
 
 import java.util.function.UnaryOperator;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static tech.madalingiurca.ordermonitor.model.OrderStatus.PAYMENT_CONFIRMED;
 
 @Service
 @Slf4j
@@ -55,9 +56,30 @@ public class KafkaListeners {
         log.info("Payment approved for order {}", orderDocument.id());
     }
 
+    @KafkaListener(topics = "updates", groupId = "order-updates-consumer")
+    public void listenOrderUpdates(String updateOrderEvent) throws JsonProcessingException {
+        System.out.println("Received order update event event: " + updateOrderEvent);
+        var updateOrder = objectMapper.readValue(updateOrderEvent, UpdateOrderEvent.class);
+
+        var orderDocument = orderRepository.findById(updateOrder.orderId())
+                .map(order -> new OrderDocument(
+                        order.id(),
+                        updateOrder.newStatus(),
+                        order.paymentReference(),
+                        order.address(),
+                        order.products(),
+                        order.amount()
+                ))
+                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Order not found for payment reference"));
+
+        orderRepository.save(orderDocument);
+
+        log.info("Order updated {}", orderDocument.id());
+    }
+
     private final UnaryOperator<OrderDocument> markOrderWithApprovedPayment = order -> new OrderDocument(
             order.id(),
-            OrderStatus.PAYMENT_CONFIRMED,
+            PAYMENT_CONFIRMED,
             order.paymentReference(),
             order.address(),
             order.products(),
