@@ -18,7 +18,7 @@ import static tech.madalingiurca.ordertracking.model.OrderStatus.*;
 @Slf4j
 @RequiredArgsConstructor
 @ConditionalOnBean(OrderManagerService.class)
-public class OrderShipmentScheduler {// TODO: 03.05.2023 add a scheduler for kafka implementation
+public class OrderShipmentScheduler {
 
     private final TrackingRepository repository;
     private final OrderManagerService orderManagerService;
