@@ -23,7 +23,7 @@ public class OrderShipmentScheduler {
     private final TrackingRepository repository;
     private final OrderManagerService orderManagerService;
 
-    @Scheduled(initialDelay = 30, fixedRate = 30, timeUnit = SECONDS)
+    @Scheduled(initialDelay = 5, fixedRate = 5, timeUnit = SECONDS)
     public void startOrderShipment() {
         final UnaryOperator<TrackedOrderDocument> updateOrderManager = (order) -> {
             orderManagerService.updateOrderDetails(order.orderId(), order.orderStatus());
@@ -37,7 +37,7 @@ public class OrderShipmentScheduler {
                 .forEach(repository::save);
     }
 
-    @Scheduled(initialDelay = 60, fixedRate = 30, timeUnit = SECONDS)
+    @Scheduled(initialDelay = 10, fixedRate = 5, timeUnit = SECONDS)
     public void markOrderAsDelivered() {
         final UnaryOperator<TrackedOrderDocument> updateOrderManager = (order) -> {
             orderManagerService.updateOrderDetails(order.orderId(), order.orderStatus());

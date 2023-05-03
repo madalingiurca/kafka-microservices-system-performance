@@ -25,7 +25,7 @@ public class KafkaOrderScheduler {
     private final KafkaTemplate<String, Serializable> kafkaTemplate;
     private final TrackingRepository repository;
 
-    @Scheduled(initialDelay = 30, fixedRate = 30, timeUnit = SECONDS)
+    @Scheduled(initialDelay = 5, fixedRate = 5, timeUnit = SECONDS)
     public void startOrderShipment() {
         log.info("Starting process of order shipment using kafka");
 
@@ -44,7 +44,7 @@ public class KafkaOrderScheduler {
                 });
     }
 
-    @Scheduled(initialDelay = 60, fixedRate = 30, timeUnit = SECONDS)
+    @Scheduled(initialDelay = 10, fixedRate = 5, timeUnit = SECONDS)
     public void markOrderAsDelivered() {
         log.debug("Starting process of order delivery using kafka");
         repository.findAllByOrderStatus(SHIPPED).stream()
