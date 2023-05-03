@@ -6,12 +6,15 @@ import tech.madalingiurca.ordertracking.model.OrderStatus;
 
 import java.util.UUID;
 
-public record OrderTrackingRequest(UUID orderId, OrderStatus orderStatus) {
+public record OrderTrackingRequest(UUID orderId, OrderStatus orderStatus, UUID paymentReference) {
     @JsonCreator
     public OrderTrackingRequest(
             @JsonProperty("orderId") UUID orderId,
-            @JsonProperty("orderStatus") OrderStatus orderStatus) { // TODO: 03.05.2023 add one more field for payment reference
+            @JsonProperty("orderStatus") OrderStatus orderStatus,
+            @JsonProperty("paymentReference") UUID paymentReference
+    ) {
         this.orderId = orderId;
         this.orderStatus = orderStatus;
+        this.paymentReference = paymentReference;
     }
 }

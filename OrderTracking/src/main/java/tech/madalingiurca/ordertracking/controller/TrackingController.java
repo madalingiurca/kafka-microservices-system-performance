@@ -28,7 +28,7 @@ public class TrackingController {
 
     @PostMapping("/initialize")
     public void initializeOrder(@RequestBody OrderTrackingRequest orderTrackingRequest) {
-        repository.save(new TrackedOrderDocument(orderTrackingRequest.orderId(), orderTrackingRequest.orderStatus(), null));
+        repository.save(new TrackedOrderDocument(orderTrackingRequest.orderId(), orderTrackingRequest.orderStatus(), orderTrackingRequest.paymentReference()));
     }
 
     @PostMapping("/update/{id}")

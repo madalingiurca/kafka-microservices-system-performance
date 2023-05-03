@@ -33,8 +33,8 @@ public class RestOrderService implements OrderService {
     @Override
     public OrderDocument newOrder(NewOrderRequest newOrderRequest) {
         UUID newOrderId = UUID.randomUUID();
-        trackingService.initializeOrderTracking(newOrderId, AWAITING_PAYMENT);
         UUID paymentReference = paymentService.initiatePaymentRequest(newOrderId, newOrderRequest.amount());
+        trackingService.initializeOrderTracking(newOrderId, AWAITING_PAYMENT, paymentReference);
 
         OrderDocument orderDocument = new OrderDocument(
                 newOrderId,

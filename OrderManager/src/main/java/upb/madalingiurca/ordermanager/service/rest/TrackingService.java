@@ -32,11 +32,11 @@ public class TrackingService {
     @Value("${order.tracking.url}")
     private String orderTrackerURL;
 
-    public void initializeOrderTracking(UUID orderId, OrderStatus awaitingPayment) {
+    public void initializeOrderTracking(UUID orderId, OrderStatus awaitingPayment, UUID paymentReference) {
         ObjectNode requestBody = objectMapper.createObjectNode()
                 .put("orderId", orderId.toString())
-                .put("orderStatus", awaitingPayment.toString());
-        // TODO: 03.05.2023 add one more field in the request for payment reference - kafka consistency
+                .put("orderStatus", awaitingPayment.toString())
+                .put("paymentReference", paymentReference.toString());
 
         var orderRequest = HttpRequest.newBuilder(URI.create(orderTrackerURL))
                 .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
