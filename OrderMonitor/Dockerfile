@@ -5,4 +5,4 @@ WORKDIR /app
 
 ADD ./target/ordermonitor*.jar ./OrderMonitor.jar
 
-ENTRYPOINT ["java", "-Djdk.httpclient.HttpClient.log=requests", "-jar", "OrderMonitor.jar"]
+ENTRYPOINT ["java", "-jar", "OrderMonitor.jar"]

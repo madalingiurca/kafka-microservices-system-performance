@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Profile;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -18,6 +19,7 @@ import static tech.madalingiurca.ordertracking.model.OrderStatus.PAYMENT_CONFIRM
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Profile("kafka")
 public class KafkaListeners {
     private final TrackingRepository trackingRepository;
     private final ObjectMapper objectMapper;

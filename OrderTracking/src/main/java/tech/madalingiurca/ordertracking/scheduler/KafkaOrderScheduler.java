@@ -46,9 +46,9 @@ public class KafkaOrderScheduler {
 
     @Scheduled(initialDelay = 10, fixedRate = 5, timeUnit = SECONDS)
     public void markOrderAsDelivered() {
-        log.debug("Starting process of order delivery using kafka");
+        log.info("Starting process of order delivery using kafka");
         repository.findAllByOrderStatus(SHIPPED).stream()
-                .peek(order -> log.debug("Delivery completed for order {}", order.orderId()))
+                .peek(order -> log.info("Delivery completed for order {}", order.orderId()))
                 .map(changeStatusToDelivered)
                 .forEach(trackedOrderDocument -> {
                     kafkaTemplate.send("updates", new UpdateOrderEvent(trackedOrderDocument.orderId(), trackedOrderDocument.orderStatus()))

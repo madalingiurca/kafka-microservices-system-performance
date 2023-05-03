@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Profile;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -21,6 +22,7 @@ import static tech.madalingiurca.ordermonitor.model.OrderStatus.PAYMENT_CONFIRME
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@Profile("kafka")
 public class KafkaListeners {
 
     private final ObjectMapper objectMapper;
@@ -28,7 +30,6 @@ public class KafkaListeners {
 
     @KafkaListener(topics = "orders", groupId = "new-orders-consumer")
     public void listenNewOrderEvent(String newOrder) throws JsonProcessingException {
-        System.out.println("Received newOrder: " + newOrder);
         var newOrderEvent = objectMapper.readValue(newOrder, NewOrderEvent.class);
         var orderDocument = new OrderDocument(
                 newOrderEvent.id(),
@@ -44,7 +45,6 @@ public class KafkaListeners {
 
     @KafkaListener(topics = "payments", groupId = "payments-approval-consumer")
     public void listenPaymentApproval(String paymentApprovalEvent) throws JsonProcessingException {
-        System.out.println("Received payment approval event: " + paymentApprovalEvent);
         var paymentApproval = objectMapper.readValue(paymentApprovalEvent, PaymentApprovalEvent.class);
 
         var orderDocument = orderRepository.findOrderDocumentByPaymentReference(paymentApproval.paymentReference())
@@ -58,7 +58,6 @@ public class KafkaListeners {
 
     @KafkaListener(topics = "updates", groupId = "order-updates-consumer")
     public void listenOrderUpdates(String updateOrderEvent) throws JsonProcessingException {
-        System.out.println("Received order update event event: " + updateOrderEvent);
         var updateOrder = objectMapper.readValue(updateOrderEvent, UpdateOrderEvent.class);
 
         var orderDocument = orderRepository.findById(updateOrder.orderId())

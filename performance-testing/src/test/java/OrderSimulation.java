@@ -4,7 +4,6 @@ import io.gatling.javaapi.http.HttpProtocolBuilder;
 
 import static io.gatling.javaapi.core.CoreDsl.*;
 import static io.gatling.javaapi.http.HttpDsl.http;
-import static java.time.Duration.ofSeconds;
 
 public class OrderSimulation extends Simulation {
     HttpProtocolBuilder httpProtocol = http
@@ -13,23 +12,23 @@ public class OrderSimulation extends Simulation {
             .acceptHeader("application/json");
 
     ScenarioBuilder scn = scenario("Place order and checks until delivery ends")
-            .pause(10)
+            .pause(1, 5)
             .exec(Config.createOrderRequest)
-            .pause(8)
+            .pause(1)
             .exec(Config.monitorOrderRequest)
-            .pause(ofSeconds(10))
+            .pause(5, 10)
             .exec(Config.approvePaymentRequest)
-            .pause(30)
+            .pause(2)
             .asLongAs(Config.orderNotFinalized).on(
                     exec(Config.monitorOrderRequest
                             .check(jsonPath("$.orderDetails.orderStatus").saveAs("orderStatus"))
-                    ).pause(10)
+                    ).pause(2, 15)
             );
 
     {
         setUp(scn.injectOpen(
-                        rampUsersPerSec(1).to(30).during(30),
-                        constantUsersPerSec(30).during(4)
+                        rampUsersPerSec(1).to(50).during(30),
+                        constantUsersPerSec(50).during(20)
                 )
         ).protocols(httpProtocol);
     }

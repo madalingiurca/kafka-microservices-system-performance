@@ -5,4 +5,4 @@ WORKDIR /app
 
 ADD ./target/PaymentProcessor*.jar ./PaymentProcessor.jar
 
-ENTRYPOINT ["java", "-Djdk.httpclient.HttpClient.log=requests", "-jar", "PaymentProcessor.jar"]
+ENTRYPOINT ["java", "-jar", "PaymentProcessor.jar"]
