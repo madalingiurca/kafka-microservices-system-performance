@@ -41,7 +41,7 @@ public class KafkaOrderService implements OrderService {
         kafkaTemplate.send("orders", new NewOrderEvent(orderDocument))
                 .whenComplete(((res, throwable) -> {
                     if (res != null)
-                        log.info("New order event successfully posted {}", res.getProducerRecord().value());
+                        log.debug("New order event successfully posted {}", res.getProducerRecord().value());
                     else
                         log.error("Error while posting on kafka bus:", throwable);
                 }));

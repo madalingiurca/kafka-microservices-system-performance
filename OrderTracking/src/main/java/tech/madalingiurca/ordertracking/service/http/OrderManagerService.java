@@ -44,7 +44,7 @@ public class OrderManagerService {
         try {
             HttpResponse<String> responseBody = httpClient.send(orderRequest, HttpResponse.BodyHandlers.ofString());
             if (responseBody.statusCode() == 200) {
-                log.info("Status of order successfully updated: {}", responseBody.body());
+                log.debug("Status of order successfully updated: {}", responseBody.body());
                 return;
             }
 

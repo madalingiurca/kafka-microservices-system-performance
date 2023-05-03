@@ -24,17 +24,17 @@ public class KafkaListeners {
 
     @KafkaListener(topics = "orders", groupId = "new-orders-tracking-consumer")
     public void listenNewOrder(String newOrderEvent) throws JsonProcessingException {
-        log.info("New order event received {}", newOrderEvent);
+        log.debug("New order event received {}", newOrderEvent);
 
         var newOrder = objectMapper.readValue(newOrderEvent, NewOrderEvent.class);
         var trackedOrderDocument = trackingRepository.save(new TrackedOrderDocument(newOrder.id(), newOrder.orderStatus(), newOrder.paymentReference()));
 
-        log.info("New order is being tracked with id {} having status {}", trackedOrderDocument.orderId(), trackedOrderDocument.orderStatus());
+        log.debug("New order is being tracked with id {} having status {}", trackedOrderDocument.orderId(), trackedOrderDocument.orderStatus());
     }
 
     @KafkaListener(topics = "payments", groupId = "payment-approval-tracking-consumer")
     public void listenPaymentApproval(String paymentApprovalEvent) throws JsonProcessingException {
-        log.info("Payment approval event received {}", paymentApprovalEvent);
+        log.debug("Payment approval event received {}", paymentApprovalEvent);
 
         var paymentApproval = objectMapper.readValue(paymentApprovalEvent, PaymentApprovalEvent.class);
         TrackedOrderDocument updatedTrackingDocument = trackingRepository.findByPaymentReference(paymentApproval.paymentReference())
@@ -42,6 +42,6 @@ public class KafkaListeners {
                 .map(trackingRepository::save)
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Tracking update failed"));
 
-        log.info("Order {} status has been updated to {}", updatedTrackingDocument.orderId(), PAYMENT_CONFIRMED);
+        log.debug("Order {} status has been updated to {}", updatedTrackingDocument.orderId(), PAYMENT_CONFIRMED);
     }
 }

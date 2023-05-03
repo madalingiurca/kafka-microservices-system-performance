@@ -42,11 +42,11 @@ public class TrackingService {
                 .POST(HttpRequest.BodyPublishers.ofString(requestBody.toString()))
                 .build();
         try {
-            log.info("Sending request towards {} having as body {}", orderTrackerURL, requestBody);
+            log.debug("Sending request towards {} having as body {}", orderTrackerURL, requestBody);
             var responseBody = httpClient.send(orderRequest, HttpResponse.BodyHandlers.ofString());
 
             if (responseBody.statusCode() == 200) {
-                log.info("Tracking initiation successful.");
+                log.debug("Tracking initiation successful.");
                 return;
             }
 

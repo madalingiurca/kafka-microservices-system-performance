@@ -39,7 +39,7 @@ public class PaymentsQueryService {
             HttpResponse<String> responseBody = httpClient.send(orderRequest, HttpResponse.BodyHandlers.ofString());
 
             if (responseBody.statusCode() == 200) {
-                log.info("Payment details retrieved: {}", responseBody);
+                log.debug("Payment details retrieved: {}", responseBody);
                 return Optional.of(objectMapper.readValue(responseBody.body(), PaymentDetails.class));
             }
 

@@ -36,7 +36,7 @@ public class KafkaOrderScheduler {
                     kafkaTemplate.send("updates", new UpdateOrderEvent(trackedOrderDocument.orderId(), trackedOrderDocument.orderStatus()))
                             .whenComplete(((res, throwable) -> {
                                 if (res != null) {
-                                    log.info("New order update event successfully posted {}", res.getProducerRecord().value());
+                                    log.debug("New order update event successfully posted {}", res.getProducerRecord().value());
                                 } else
                                     log.error("Error while posting on kafka bus:", throwable);
                             }));
@@ -46,15 +46,15 @@ public class KafkaOrderScheduler {
 
     @Scheduled(initialDelay = 60, fixedRate = 30, timeUnit = SECONDS)
     public void markOrderAsDelivered() {
-        log.info("Starting process of order delivery using kafka");
+        log.debug("Starting process of order delivery using kafka");
         repository.findAllByOrderStatus(SHIPPED).stream()
-                .peek(order -> log.info("Delivery completed for order {}", order.orderId()))
+                .peek(order -> log.debug("Delivery completed for order {}", order.orderId()))
                 .map(changeStatusToDelivered)
                 .forEach(trackedOrderDocument -> {
                     kafkaTemplate.send("updates", new UpdateOrderEvent(trackedOrderDocument.orderId(), trackedOrderDocument.orderStatus()))
                             .whenComplete(((res, throwable) -> {
                                 if (res != null) {
-                                    log.info("New order update event successfully posted {}", res.getProducerRecord().value());
+                                    log.debug("New order update event successfully posted {}", res.getProducerRecord().value());
                                 } else
                                     log.error("Error while posting on kafka bus:", throwable);
                             }));

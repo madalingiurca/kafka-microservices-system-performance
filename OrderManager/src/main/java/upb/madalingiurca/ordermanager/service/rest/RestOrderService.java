@@ -48,7 +48,7 @@ public class RestOrderService implements OrderService {
     }
 
     public OrderStatus updateOrder(OrderStatusUpdate orderStatusUpdate) {
-        log.info("Updating order having id {} to status: {}", orderStatusUpdate.orderId(), orderStatusUpdate.orderStatus());
+        log.debug("Updating order having id {} to status: {}", orderStatusUpdate.orderId(), orderStatusUpdate.orderStatus());
         OrderDocument orderDocument = orderRepository.findById(orderStatusUpdate.orderId())
                 .map(currentOrder -> overrideOrderStatus.apply(currentOrder, orderStatusUpdate.orderStatus()))
                 .map(orderRepository::save)

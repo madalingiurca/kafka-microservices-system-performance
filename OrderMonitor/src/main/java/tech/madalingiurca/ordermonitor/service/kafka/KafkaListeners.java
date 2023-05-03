@@ -39,7 +39,7 @@ public class KafkaListeners {
                 newOrderEvent.amount());
 
         orderRepository.save(orderDocument);
-        log.info("Order with {} saved in the database", orderDocument.id());
+        log.debug("Order with {} saved in the database", orderDocument.id());
     }
 
     @KafkaListener(topics = "payments", groupId = "payments-approval-consumer")
@@ -53,7 +53,7 @@ public class KafkaListeners {
 
         orderRepository.save(orderDocument);
 
-        log.info("Payment approved for order {}", orderDocument.id());
+        log.debug("Payment approved for order {}", orderDocument.id());
     }
 
     @KafkaListener(topics = "updates", groupId = "order-updates-consumer")
@@ -74,7 +74,7 @@ public class KafkaListeners {
 
         orderRepository.save(orderDocument);
 
-        log.info("Order updated {}", orderDocument.id());
+        log.debug("Order updated {}", orderDocument.id());
     }
 
     private final UnaryOperator<OrderDocument> markOrderWithApprovedPayment = order -> new OrderDocument(

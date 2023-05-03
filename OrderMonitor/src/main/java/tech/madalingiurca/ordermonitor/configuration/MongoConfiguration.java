@@ -43,7 +43,7 @@ public class MongoConfiguration {
                 .applyConnectionString(new ConnectionString("mongodb://" + mongoHost + ":" + mongoPort))
                 .build();
 
-        log.info("""
+        log.debug("""
                 Creating mongo client using credentials {} and connection string {}
                 """, mongoClientSettings.getCredential(), mongoClientSettings.getConnectionPoolSettings());
 

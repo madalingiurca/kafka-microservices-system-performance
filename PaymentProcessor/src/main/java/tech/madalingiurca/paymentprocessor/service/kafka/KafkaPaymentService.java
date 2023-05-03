@@ -42,7 +42,7 @@ public class KafkaPaymentService implements PaymentService {
         kafkaTemplate.send("payments", new PaymentApprovalEvent(approvalRequest.paymentId()))
                 .whenComplete(((res, throwable) -> {
                     if (res != null)
-                        log.info("New payment approval event successfully posted {}", res.getProducerRecord().value());
+                        log.debug("New payment approval event successfully posted {}", res.getProducerRecord().value());
                     else
                         log.error("Error while posting on kafka bus:", throwable);
                 }));

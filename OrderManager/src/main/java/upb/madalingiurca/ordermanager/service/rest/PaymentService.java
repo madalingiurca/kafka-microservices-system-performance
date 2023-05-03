@@ -43,11 +43,11 @@ public class PaymentService {
                 .POST(HttpRequest.BodyPublishers.ofString(requestBody.toString()))
                 .build();
         try {
-            log.info("Sending request towards {} having as body {}", uri, orderRequest.toString());
+            log.debug("Sending request towards {} having as body {}", uri, orderRequest.toString());
             var responseBody = httpClient.send(orderRequest, HttpResponse.BodyHandlers.ofString());
 
             if (responseBody.statusCode() == 200) {
-                log.info("Payment initiation successful: {}", responseBody);
+                log.debug("Payment initiation successful: {}", responseBody);
                 return UUID.fromString(objectMapper.readTree(responseBody.body()).at("/id").asText());
             }
 

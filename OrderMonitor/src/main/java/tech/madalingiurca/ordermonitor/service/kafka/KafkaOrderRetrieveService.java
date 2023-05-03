@@ -31,7 +31,7 @@ public class KafkaOrderRetrieveService implements OrderRetrieveService {
         OrderDocument order = orderRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Order not found"));
 
-        log.info("Order status ordinal = {}", order.orderStatus().ordinal());
+        log.debug("Order status ordinal = {}", order.orderStatus().ordinal());
         var paymentStatus = order.orderStatus().ordinal() < 2 ? WAITING : APPROVED;
         var payment = new PaymentDetails(order.amount(), paymentStatus);
         var orderDetails = new OrderDetails(

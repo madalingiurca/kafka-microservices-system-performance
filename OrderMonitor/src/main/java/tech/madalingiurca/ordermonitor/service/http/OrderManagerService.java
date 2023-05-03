@@ -39,7 +39,7 @@ public class OrderManagerService {
             HttpResponse<String> responseBody = httpClient.send(orderRequest, HttpResponse.BodyHandlers.ofString());
 
             if (responseBody.statusCode() == 200) {
-                log.info("Order retrieved: {}", responseBody);
+                log.debug("Order retrieved: {}", responseBody);
                 return Optional.of(objectMapper.readValue(responseBody.body(), OrderDetails.class));
             }
 
