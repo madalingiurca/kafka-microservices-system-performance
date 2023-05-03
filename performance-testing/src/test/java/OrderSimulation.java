@@ -15,6 +15,7 @@ public class OrderSimulation extends Simulation {
     ScenarioBuilder scn = scenario("Place order and checks until delivery ends")
             .pause(10)
             .exec(Config.createOrderRequest)
+            .pause(8)
             .exec(Config.monitorOrderRequest)
             .pause(ofSeconds(10))
             .exec(Config.approvePaymentRequest)
