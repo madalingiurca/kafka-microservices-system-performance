@@ -1,0 +1,32 @@
+@startuml
+
+!define GreenBlueColor #33CCCC, #009933
+!define HalfGreenBlueColor #66CC99, #003399
+
+component "Docker Engine" as docker_engine
+
+package "Docker" {
+    component "NGINX"
+
+    component "Order Manager" as order_manager
+    component "Payment Processor" as payment_processor
+    component "Order Monitor" as order_monitor
+    component "Order Tracking" as order_tracking
+
+    component "Mongo Database" as mongo_database
+    component "Kafka broker" as kafka_broker
+    component "Zookeeper" as zookeeper
+}
+
+left to right direction
+
+order_manager  <-- docker_engine
+payment_processor  <-- docker_engine
+order_monitor  <-- docker_engine
+order_tracking  <-- docker_engine
+NGINX  <-- docker_engine
+mongo_database  <-- docker_engine
+kafka_broker  <-- docker_engine
+zookeeper  <-- docker_engine
+
+@enduml
