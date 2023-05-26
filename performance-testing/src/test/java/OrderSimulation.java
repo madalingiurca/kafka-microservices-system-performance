@@ -4,8 +4,12 @@ import io.gatling.javaapi.http.HttpProtocolBuilder;
 
 import static io.gatling.javaapi.core.CoreDsl.*;
 import static io.gatling.javaapi.http.HttpDsl.http;
+import static java.time.Duration.ofSeconds;
 
 public class OrderSimulation extends Simulation {
+
+    final int NUMBER_OF_USERS = 200;
+
     HttpProtocolBuilder httpProtocol = http
             .baseUrl("http://localhost:8000")
             .header("content-type", "application/json")
@@ -14,12 +18,15 @@ public class OrderSimulation extends Simulation {
     ScenarioBuilder scn = scenario("Place order and checks until delivery ends")
             .pause(1, 5)
             .exec(Config.createOrderRequest)
+            .exitHereIfFailed()
             .pause(1)
             .exec(Config.monitorOrderRequest)
+            .exitHereIfFailed()
             .pause(5, 10)
             .exec(Config.approvePaymentRequest)
+            .exitHereIfFailed()
             .pause(2)
-            .asLongAs(Config.orderNotFinalized).on(
+            .asLongAsDuring(Config.orderNotFinalized, ofSeconds(80)).on(
                     exec(Config.monitorOrderRequest
                             .check(jsonPath("$.orderDetails.orderStatus").saveAs("orderStatus"))
                     ).pause(2, 15)
@@ -27,8 +34,8 @@ public class OrderSimulation extends Simulation {
 
     {
         setUp(scn.injectOpen(
-                        rampUsersPerSec(1).to(50).during(30),
-                        constantUsersPerSec(50).during(20)
+                        rampUsersPerSec(1).to(NUMBER_OF_USERS).during(30),
+                        constantUsersPerSec(NUMBER_OF_USERS).during(20)
                 )
         ).protocols(httpProtocol);
     }
