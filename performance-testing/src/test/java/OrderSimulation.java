@@ -42,7 +42,8 @@ public class OrderSimulation extends Simulation {
         return http
                 .baseUrl("http://" + host)
                 .header("content-type", "application/json")
-                .acceptHeader("application/json");
+                .acceptHeader("application/json")
+                .shareConnections();
     }
 
 
