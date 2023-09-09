@@ -7,13 +7,8 @@ import static io.gatling.javaapi.http.HttpDsl.http;
 import static java.time.Duration.ofSeconds;
 
 public class OrderSimulation extends Simulation {
-
-    final int NUMBER_OF_USERS = 200;
-
-    HttpProtocolBuilder httpProtocol = http
-            .baseUrl("http://localhost:8000")
-            .header("content-type", "application/json")
-            .acceptHeader("application/json");
+    final TestProperties testProperties = new TestProperties();
+    final HttpProtocolBuilder httpProtocol = buildHttpProtocol(testProperties.env());
 
     ScenarioBuilder scn = scenario("Place order and checks until delivery ends")
             .pause(1, 5)
@@ -34,9 +29,21 @@ public class OrderSimulation extends Simulation {
 
     {
         setUp(scn.injectOpen(
-                        rampUsersPerSec(1).to(NUMBER_OF_USERS).during(30),
-                        constantUsersPerSec(NUMBER_OF_USERS).during(20)
+                        rampUsersPerSec(1).to(testProperties.rampUsers()).during(testProperties.rampDurationSeconds()),
+                        constantUsersPerSec(testProperties.constantUsers()).during(testProperties.constantDurationSeconds())
                 )
         ).protocols(httpProtocol);
     }
+
+    private static HttpProtocolBuilder buildHttpProtocol(String env) {
+        var host = env.equals("azure") ? "20.16.154.186" : "localhost:8000";
+
+        //noinspection HttpUrlsUsage
+        return http
+                .baseUrl("http://" + host)
+                .header("content-type", "application/json")
+                .acceptHeader("application/json");
+    }
+
+
 }
