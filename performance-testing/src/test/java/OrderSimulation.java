@@ -36,7 +36,7 @@ public class OrderSimulation extends Simulation {
     }
 
     private static HttpProtocolBuilder buildHttpProtocol(String env) {
-        var host = env.equals("azure") ? "20.16.154.186" : "localhost:8000";
+        var host = env.equals("azure") ? "104.40.149.227" : "localhost:8000";
 
         //noinspection HttpUrlsUsage
         return http

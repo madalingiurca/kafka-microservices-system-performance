@@ -50,3 +50,4 @@ build/
 /docs/articles/
 /mongo/data/
 /performance-testing/results/
+/.idea/sonarlint/
