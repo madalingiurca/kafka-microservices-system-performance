@@ -5,14 +5,14 @@ import java.util.Objects;
 
 @Getter
 @Accessors(fluent = true)
-final class TestProperties {
+final class TestParameters {
     private final String env;
     private final Integer rampUsers;
     private final Integer constantUsers;
     private final Integer rampDurationSeconds;
     private final Integer constantDurationSeconds;
 
-    TestProperties() {
+    TestParameters() {
         this.env = System.getProperty("environment", "local");
         this.rampUsers = Integer.getInteger("rampUsers", 1);
         this.constantUsers = Integer.getInteger("constantUsers", 1);
@@ -35,7 +35,7 @@ final class TestProperties {
     public boolean equals(Object obj) {
         if (obj == this) return true;
         if (obj == null || obj.getClass() != this.getClass()) return false;
-        var that = (TestProperties) obj;
+        var that = (TestParameters) obj;
         return Objects.equals(this.env, that.env) &&
                 Objects.equals(this.rampUsers, that.rampUsers) &&
                 Objects.equals(this.constantUsers, that.constantUsers) &&

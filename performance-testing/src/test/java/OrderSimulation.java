@@ -7,8 +7,8 @@ import static io.gatling.javaapi.http.HttpDsl.http;
 import static java.time.Duration.ofSeconds;
 
 public class OrderSimulation extends Simulation {
-    final TestProperties testProperties = new TestProperties();
-    final HttpProtocolBuilder httpProtocol = buildHttpProtocol(testProperties.env());
+    final TestParameters testParameters = new TestParameters();
+    final HttpProtocolBuilder httpProtocol = buildHttpProtocol(testParameters.env());
 
     ScenarioBuilder scn = scenario("Place order and checks until delivery ends")
             .pause(1, 5)
@@ -29,8 +29,8 @@ public class OrderSimulation extends Simulation {
 
     {
         setUp(scn.injectOpen(
-                        rampUsersPerSec(1).to(testProperties.rampUsers()).during(testProperties.rampDurationSeconds()),
-                        constantUsersPerSec(testProperties.constantUsers()).during(testProperties.constantDurationSeconds())
+                        rampUsersPerSec(1).to(testParameters.rampUsers()).during(testParameters.rampDurationSeconds()),
+                        constantUsersPerSec(testParameters.constantUsers()).during(testParameters.constantDurationSeconds())
                 )
         ).protocols(httpProtocol);
     }
