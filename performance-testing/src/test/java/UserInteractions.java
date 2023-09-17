@@ -8,7 +8,7 @@ import static io.gatling.javaapi.core.CoreDsl.*;
 import static io.gatling.javaapi.http.HttpDsl.http;
 import static io.gatling.javaapi.http.HttpDsl.status;
 
-public class Config {
+public class UserInteractions {
     public static final HttpRequestActionBuilder createOrderRequest = http("create_order")
             .post("/orders/new")
             .body(RawFileBody("new-order-request.json"))

@@ -12,17 +12,17 @@ public class OrderSimulation extends Simulation {
 
     ScenarioBuilder scn = scenario("Place order and checks until delivery ends")
             .pause(1, 5)
-            .exec(Config.createOrderRequest)
+            .exec(UserInteractions.createOrderRequest)
             .exitHereIfFailed()
             .pause(1)
-            .exec(Config.monitorOrderRequest)
+            .exec(UserInteractions.monitorOrderRequest)
             .exitHereIfFailed()
             .pause(5, 10)
-            .exec(Config.approvePaymentRequest)
+            .exec(UserInteractions.approvePaymentRequest)
             .exitHereIfFailed()
             .pause(2)
-            .asLongAsDuring(Config.orderNotFinalized, ofSeconds(80)).on(
-                    exec(Config.monitorOrderRequest
+            .asLongAsDuring(UserInteractions.orderNotFinalized, ofSeconds(80)).on(
+                    exec(UserInteractions.monitorOrderRequest
                             .check(jsonPath("$.orderDetails.orderStatus").saveAs("orderStatus"))
                     ).pause(2, 15)
             );
