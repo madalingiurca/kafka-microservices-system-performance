@@ -2,7 +2,7 @@
   <configuration default="false" name="Run azure perf tests - 50" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="TestDriver" />
     <module name="performance-testing" />
-    <option name="VM_PARAMETERS" value="-Denvironment=azure -DrampUsers=50 -DconstantUsers=50 -DrampDuration=20 -DconstantDuration=30" />
+    <option name="VM_PARAMETERS" value="-Denvironment=azure -DrampUsers=50 -DconstantUsers=50 -DrampDuration=30 -DconstantDuration=120" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>
